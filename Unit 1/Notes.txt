@@ -1,0 +1,12 @@
+#Sklearn clfs documentation
+#https://scikit-learn.org/stable/supervised_learning.html
+
+
+#Main topics for today.
+
+1. Introductions & How are things going?
+2. Code - line by line
+3. Data Structures - LIsts and Dictionaries
+4. Loops
+5. The ** operator
+6. Example code to get you started.
