@@ -11,15 +11,18 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
 
-x = np.array([[1,2],[3,4],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5]])
-y = np.random.choice([0,1], size=(x.shape[0],), p=[1./3, 2./3])
-# iris = datasets.load_iris()
-# x = iris.data
-# y = iris.target
+# x = np.array([[1,2],[3,4],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5],[4,5]])
+# y = np.random.choice([0,1], size=(x.shape[0],), p=[1./3, 2./3])
+iris = datasets.load_iris()
+x = iris.data
+y = iris.target
 n_folds = 5
 dataInputVariable = (x,y,n_folds)
 
-
+classifiersList = [RandomForestClassifier, LogisticRegression,SVC]
+classifierParametersDictionary = {'RandomForestClassifier': {"min_samples_split": [2,3,4],"n_estimators":[100],"n_jobs":[4]},
+                                  'LogisticRegression': {"tol": [0.001,0.01,0.1],"solver":['lbfgs'],"multi_class":['auto']},
+                                 'SVC': {"C": [1.1, 0.5],"gamma":['scale']}}
 
 def run(classifierInputVariable, dataInputVariable, parameterInputVariable={}):
     x, y, n_folds = dataInputVariable
@@ -37,10 +40,7 @@ def run(classifierInputVariable, dataInputVariable, parameterInputVariable={}):
 
 # results={}
 clfsAccuracyDict = {}
-classifiersList = [RandomForestClassifier, LogisticRegression,SVC]
-classifierParametersDictionary = {'RandomForestClassifier': {"min_samples_split": [2,3,4],"n_estimators":[100],"n_jobs":[2,4,6]},
-                                  'LogisticRegression': {"tol": [0.001,0.01,0.1],"solver":['lbfgs'],"multi_class":['auto']},
-                                 'SVC': {"C": [1.1, 0.5],"gamma":['scale']}}                        
+
 for classifier in classifiersList:
     classifierString = str(classifier)
     for outerKey, outerValue in classifierParametersDictionary.items():
@@ -59,9 +59,8 @@ for classifier in classifiersList:
                         clfsAccuracyDict[k1Test].append(v1)
                     else:
                         clfsAccuracyDict[k1Test] = [v1] #create a new key (k1Test) in clfsAccuracyDict with a new value, (v1)
-#                         print(clfsAccuracyDict)   
-
-
+                        print(clfsAccuracyDict)   
+                        
 n = max(len(v1) for k1, v1 in clfsAccuracyDict.items())
 
 # for naming the plots
