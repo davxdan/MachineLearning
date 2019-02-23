@@ -8,21 +8,12 @@ Created on Sat Feb 16 11:18:35 2019
 import numpy as np
 
 # Decision making with Matrices
-# This is a pretty simple assingment.  You will do something you do everyday, but today it will be with matrix manipulations.
-# The problem is: you and your work firends are trying to decide where to go for lunch. You have to pick a resturant thats best for everyone.  
-# Then you should decided if you should split into two groups so eveyone is happier.
-# Displicte the simplictiy of the process you will need to make decisions regarding how to process the data.
-# This process was thoughly investigated in the operation research community.  This approah can prove helpful on any number of 
-# decsion making problems that are currently not leveraging machine learning.
+#You and friends are trying to decide where to go for lunch. Pick a resturant thats best for everyone.  
+# Then you should decide if you should split into two groups so eveyone is happier.
+
 # You asked your 10 work friends to answer a survey. They gave you back the following dictionary object.
 
 
-#%%
-#Set a seed
-np.random.seed(seed=1)
-#Generate 10 rows of 4 random values which each sum to 1
-npRatings=np.array([np.random.dirichlet(np.ones(4),size=10)])
-npRatings
 #%%
 #The people nested dictionaries
 people = {'Jane': {'willingness to travel': 0.1596993,
@@ -43,14 +34,22 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   },
                   }
 #%%
+#Set a seed
+np.random.seed(seed=1)
+#Generate 10 rows of 4 random values which each sum to 1
+npRatings=np.array([np.random.dirichlet(np.ones(4),size=10)])
+#Generate 10 rows of random values between 1 and 10
+npRandScores=np.random.randint(1,11,10)
+
+#%%
 # Transform the user data into a matrix(M_people). Keep track of column and row ids.
-# convert each person's values to a list
+
 peopleKeys, peopleValues = [], []
 lastKey = 0
 for k1, v1 in people.items():
     row = []
     for k2, v2 in v1.items():
-        peopleKeys.append(k1+'_'+k2)
+        peopleKeys.append(k2)
         if k1 == lastKey:
             row.append(v2)      
             lastKey = k1
@@ -134,15 +133,6 @@ newPeopleMatrix = np.swapaxes(peopleMatrix, 0, 1)
 # Choose a person and compute(using a linear combination) the top restaurant for them.  
 # What does each entry in the resulting vector represent?
 
-print(peopleKeys)
-print(peopleValues)
-
-newPeopleMatrix
-
-print(restaurantsKeys)
-restaurantsMatrix
-
-
 #Build intuition..
 #Jane's score for Flacos
 2*0.1596993 + 3*0.67131344 + 4*0.15006726 + 5*0.01892
@@ -156,11 +146,11 @@ restaurantsMatrix
 #Bob's score for Joes
 5*0.63124581 + 1*0.20269888 + 5*0.01354308 + 3*0.15251223
 
-
+#%%
 # Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all people.  What does the a_ij matrix represent?
 #Let's check our answers
 results = np.matmul(restaurantsMatrix, newPeopleMatrix)
-results                               
+#%%
 
 
 # Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
