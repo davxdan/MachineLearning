@@ -98,34 +98,34 @@ restaurantsMatrix = np.reshape(restaurantsValues, (2,4))
 #restaurantsMatrix.shape
 #%%
 # Matrix multiplication
-# Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
-#  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
-# documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
-# intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
-# What is a matrix product?
-# https://en.wikipedia.org/wiki/Matrix_multiplication
-# https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul
-#However, this won't work...
-np.matmul(restaurantsMatrix, peopleMatrix)
 
-#Why?
-restaurantsMatrix.shape, peopleMatrix.shape
-#We need to swap axis on peopleMatrix
-#newPeopleMatrix = np.swapaxes(peopleMatrix, 1, 0)
+##########################Notes from Christopher Havenstein
+## Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
+##  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
+## documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
+## intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
+## What is a matrix product?
+## https://en.wikipedia.org/wiki/Matrix_multiplication
+## https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul
+##However, this won't work...
+###########################
+#%%
+#This errors because matrices aren't aligned properly. Inner dim must be same size
+#np.matmul(restaurantsMatrix, peopleMatrix)
+#restaurantsMatrix.shape, peopleMatrix.shape
+#Out[10]: ((2, 4), (2, 4))
+#%%
 
+#Swap axis on peopleMatrix
+newPeopleMatrix = np.swapaxes(peopleMatrix, 1, 0)
+#%%
 #https://docs.scipy.org/doc/numpy/reference/generated/numpy.swapaxes.html
 newPeopleMatrix = np.swapaxes(peopleMatrix, 0, 1)
-
-#look at the matrices
-peopleMatrix
-newPeopleMatrix
-
-restaurantsMatrix
-
-restaurantsMatrix.shape, newPeopleMatrix.shape
-
+#%%
+#restaurantsMatrix.shape, newPeopleMatrix.shape
+#Out[15]: ((2, 4), (4, 2))
+#%%
 # The most imporant idea in this project is the idea of a linear combination.
-
 # Informally describe what a linear combination is and how it will relate to our resturant matrix.
 
     #This is for you to answer! However....https://en.wikipedia.org/wiki/Linear_combination
