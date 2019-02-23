@@ -8,25 +8,23 @@ Created on Sat Feb 16 11:18:35 2019
 import numpy as np
 
 # Decision making with Matrices
-
 # This is a pretty simple assingment.  You will do something you do everyday, but today it will be with matrix manipulations.
-
 # The problem is: you and your work firends are trying to decide where to go for lunch. You have to pick a resturant thats best for everyone.  
 # Then you should decided if you should split into two groups so eveyone is happier.
-
 # Displicte the simplictiy of the process you will need to make decisions regarding how to process the data.
-
 # This process was thoughly investigated in the operation research community.  This approah can prove helpful on any number of 
 # decsion making problems that are currently not leveraging machine learning.
-
 # You asked your 10 work friends to answer a survey. They gave you back the following dictionary object.
 
 
-#to determine random values for weights
-print(np.array([np.random.dirichlet(np.ones(4),size=1)]))
-
-
-
+#%%
+#Set a seed
+np.random.seed(seed=1)
+#Generate 10 rows of 4 random values which each sum to 1
+npRatings=np.array([np.random.dirichlet(np.ones(4),size=10)])
+npRatings
+#%%
+#The people nested dictionaries
 people = {'Jane': {'willingness to travel': 0.1596993,
                   'desire for new experience':0.67131344,
                   'cost':0.15006726,
@@ -43,44 +41,29 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   #'hipster points':3,
                   'vegetarian': 0.15251223,
                   },
-
-          }
-
+                  }
+#%%
 # Transform the user data into a matrix(M_people). Keep track of column and row ids.
-
-                                       # convert each person's values to a list
-
+# convert each person's values to a list
 peopleKeys, peopleValues = [], []
 lastKey = 0
 for k1, v1 in people.items():
     row = []
-    
     for k2, v2 in v1.items():
         peopleKeys.append(k1+'_'+k2)
         if k1 == lastKey:
             row.append(v2)      
             lastKey = k1
-            
         else:
             peopleValues.append(row)
             row.append(v2)   
             lastKey = k1
-            
-
-#here are some lists that show column keys and values
-print(peopleKeys)
-print(peopleValues)
-
-
-
+#%%
 peopleMatrix = np.array(peopleValues)
-
 peopleMatrix.shape
-
-
+#%%
 # Next you collected data from an internet website. You got the following information.
-
-#1 is bad, 5 is great
+#1=bad, 5=great
 restaurants  = {'flacos':{'distance' : 2,
                         'novelty' : 3,
                         'cost': 4,
@@ -97,39 +80,28 @@ restaurants  = {'flacos':{'distance' : 2,
                       }
 
 }
-
-
+#%%
 # Transform the restaurant data into a matrix(M_resturants) use the same column index.
-
-
 restaurantsKeys, restaurantsValues = [], []
-
 for k1, v1 in restaurants.items():
     for k2, v2 in v1.items():
         restaurantsKeys.append(k1+'_'+k2)
         restaurantsValues.append(v2)
-
-#here are some lists that show column keys and values
-print(restaurantsKeys)
-print(restaurantsValues)
-
-len(restaurantsValues)
-#reshape to 2 rows and 4 columns
-
-#converting lists to np.arrays is easy
+#%%
+#Noted that the shape is 8 but we need it to be the same shape as people matrix
+#len(restaurantsValues)
+#%%
+#create np matrix and reshape to 2 by 4 in the same function
 restaurantsMatrix = np.reshape(restaurantsValues, (2,4))
-
-restaurantsMatrix
-
-restaurantsMatrix.shape
-
+#%%
+#Verify shape
+#restaurantsMatrix.shape
+#%%
 # Matrix multiplication
 # Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
 #  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
-
 # documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
 # intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
-
 # What is a matrix product?
 # https://en.wikipedia.org/wiki/Matrix_multiplication
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul
