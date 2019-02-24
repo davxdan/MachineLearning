@@ -5,7 +5,7 @@ import numpy as np
 np.random.seed(seed=1)
 ##Generate 10 rows of 4 random values which each sum to 1 for peoples'
 # preferences
-npRatings=np.array(np.random.dirichlet(np.ones(4),size=10))
+#npRatings=np.array(np.random.dirichlet(np.ones(4),size=10))
 #Peoples' Preferenmces in nested dictionaries (Automate this if I have time)
 people = {'Jane': {'willingness to travel': 0.1596993,
                   'desire for new experience':0.67131344,
@@ -63,29 +63,29 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   #'hipster points':3,
                   'vegetarian': 0.0691065,
                   },
-            'Helen': {'willingness to travel': 0.1596993,
-                  'desire for new experience':0.67131344,
-                  'cost':0.15006726,
+            'Helen': {'willingness to travel': 0.265751,
+                  'desire for new experience':0.412282,
+                  'cost':0.0042287,
                   #'indian food':1,
                   #'Mexican food':1,
                   #'hipster points':3,
-                  'vegetarian': 0.01892,
+                  'vegetarian': 0.317738,
                   },
-            'Igor': {'willingness to travel': 0.1596993,
-                  'desire for new experience':0.67131344,
-                  'cost':0.15006726,
+            'Igor': {'willingness to travel': 0.147972,
+                  'desire for new experience':0.269156,
+                  'cost':0.551767,
                   #'indian food':1,
                   #'Mexican food':1,
                   #'hipster points':3,
-                  'vegetarian': 0.01892,
+                  'vegetarian': 0.0311052,
                   },
-            'Jimmy': {'willingness to travel': 0.1596993,
-                  'desire for new experience':0.67131344,
-                  'cost':0.15006726,
+            'Jimmy': {'willingness to travel': 0.446693,
+                  'desire for new experience':0.37458,
+                  'cost':0.0681147,
                   #'indian food':1,
                   #'Mexican food':1,
                   #'hipster points':3,
-                  'vegetarian': 0.01892,
+                  'vegetarian': 0.110612,
                   },
                   }
 #%%
@@ -99,7 +99,7 @@ lastKey = 0
 for k1, v1 in people.items():
     row = []
     for k2, v2 in v1.items():
-        peopleKeys.append(k2)
+        peopleKeys.append(k1+'_'+k2)
         if k1 == lastKey:
             row.append(v2)      
             lastKey = k1
@@ -127,7 +127,7 @@ def make_restaurants_dict(names, categories):
     restaurants = {}
 
     for n in names:
-        npRandScores=np.random.randint(1,6,10)
+        npRandScores=np.random.randint(1,11,10)
         dict_input = dict(zip(categories, npRandScores))
         restaurants[n] = dict_input
     
@@ -140,9 +140,9 @@ for k1, v1 in restaurants.items():
     for k2, v2 in v1.items():
         restaurantsKeys.append(k1+'_'+k2)
         restaurantsValues.append(v2)
-#Noted that the shape is 8 but we need it to be the same shape as people matrix
+#Noted that the shape needs to be the same shape as people matrix
 #len(restaurantsValues)
-#create np matrix and reshape to 2 by 4 in the same function
+#create np matrix and reshape to 10 by 4 in the same function
 M_restaurants = np.reshape(restaurantsValues, (10,4))
 #Verify shape
 #M_restaurants.shape
@@ -156,11 +156,14 @@ A linear combination is when we have several constant (linear) values and
 determine the product of them and some other typically varying values. (y=mx) 
 In our case we are getting the product of each rating for each restaurant 
 (constants) and each persons preferences.  For example Jane’s willingness to 
-travel is 0.1596993 and Flaco’s distance is 1 (Out of 5 which means it is far)
-Jane’s weighted willingness to travel to flaco's is 1(0.1596993) = 0.1596993.
-Her weighted willingness to travel to Joes's is 4(0.1596993) = 0.6387972.
+travel is 0.1596993 and Flaco’s distance is 6 (Out of 10 where 10 is most 
+desreable) Jane’s weighted willingness to travel to flaco's is 
+6(0.1596993) = 0.958194
+.
+Her weighted willingness to travel to Joes's is 1(0.1596993) = 0.1596993). This
+tells us that judging only from distance Flacos is best for Jane. 
 
-We HAVE A PROBLEM because each persons preference is less than 1 but the 
+We may HAVE A PROBLEM because each persons preference is less than 1 but the 
 restaurants ratings are certainly described as higher is more desireable. I 
 will revisit this later.
 """
@@ -181,85 +184,59 @@ M_people = np.swapaxes(M_people, 1, 0)
 #For Jane all Restaurants:
 janeAllResults=np.matmul(M_restaurants, M_people[:,0])
 """
-I have calculated scores for all restaurants from Janes preferences. Assuming 
-that the lower the preference value the more important it is to Jane.
-The result (for now) shows that the best restaurant for jane is janeAllResults[5]
+The result (for now) shows that the best restaurant for jane is 
+janeAllResults[7]. We are using the "Dot Product".
+"""
+#%%
+###############################################################################
+# Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all
+# people.  What does the a_ij matrix represent?
+###############################################################################
+## intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
+M_usr_x_rest=np.matmul(M_restaurants, M_people)
+"""
+This matrix represents each persons weighted preferences for each category 
+(balanced since all must sum to 1) multiplied by the rating for each category
+ in each restaurant. We can rank the restaurants for each person and use the 
+ results to determine which will be the consensus favorite choice for the whole
+ group of 10. We are using the "Dot Product" when multiplying these matrices.
+"""
+
+#%%
+
+###############################################################################
+# Sum all columns in M_usr_x_rest to get optimal restaurant for all users. What
+# do the entry’s represent?
+###############################################################################
+groupFavorites=np.sum(M_usr_x_rest, axis=1)
+"""groupFavorites represents the sum of each restaurants weigted score from 
+each person. The result (for now) shows that the best restaurant 
+considering all 10 peoples preferences versus the restaurants 1-5 rating is
+groupFavorites[3]
+We are using the "Dot Product" when multiplying these matrices.
 """
 #%%
 
-
-
-
-
-
-#%%
-# Matrix multiplication
-#Notes from Christopher Havenstein
-## Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
-##  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
-## documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
-## intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
-## What is a matrix product?
-## https://en.wikipedia.org/wiki/Matrix_multiplication
-## https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul
-##However, this won't work...
-
-#np.matmul(restaurantsMatrix, peopleMatrix)
-#restaurantsMatrix.shape, peopleMatrix.shape
-#Out[10]: ((2, 4), (2, 4))
-#%%
-
+###############################################################################
+# Now convert each row in the M_usr_x_rest into a ranking for each user and 
+# call it M_usr_x_rest_rank. Do the same as above to generate the optimal
+# resturant choice.
+# Why is there a difference between the two?  What problem arrives?  What does 
+# represent in the real world? How should you preprocess your data to remove
+# this problem?
+###############################################################################
 
 #%%
-#https://docs.scipy.org/doc/numpy/reference/generated/numpy.swapaxes.html
-newPeopleMatrix = np.swapaxes(peopleMatrix, 0, 1)
-#%%
-#restaurantsMatrix.shape, newPeopleMatrix.shape
-#Out[15]: ((2, 4), (4, 2))
-#%%
-# The most imporant idea in this project is the idea of a linear combination.
-# Informally describe what a linear combination is and how it will relate to our resturant matrix.
+# Understanding argsort function
+# https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
+#x = numpy.array([1.48,1.41,0.0,0.1])
+#print x.argsort()
+# >[2 3 1 0]
+# The results are smallest to largest. So it is showing that the lowest value 
+# is at index number 2, and the largest is at index number 0
 
-    #This is for you to answer! However....https://en.wikipedia.org/wiki/Linear_combination
-    # essentially you are multiplying each term by a constant and summing the results.
-
-# Choose a person and compute(using a linear combination) the top restaurant for them.  
-# What does each entry in the resulting vector represent?
-
-#Build intuition..
-#Jane's score for Flacos
-2*0.1596993 + 3*0.67131344 + 4*0.15006726 + 5*0.01892
-
-#Bob's score for Flacos
-2*0.63124581 + 3*0.20269888 + 4*0.01354308 + 5*0.15251223
-
-#Jane's score for Joes
-5*0.1596993 + 1*0.67131344 + 5*0.15006726 + 3*0.01892
-
-#Bob's score for Joes
-5*0.63124581 + 1*0.20269888 + 5*0.01354308 + 3*0.15251223
-
-#%%
-# Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all people.  What does the a_ij matrix represent?
-#Let's check our answers
-results = np.matmul(restaurantsMatrix, newPeopleMatrix)
-#%%
-
-
-# Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
-# I believe that this is what John and  is asking for, sum by columns
-np.sum(results, axis=1)
-#%%
-
-# Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.   
-# Do the same as above to generate the optimal resturant choice.
-results
-
-# Say that rank 1 is best
-
-#reference: https://docs.scipy.org/doc/numpy/reference/generated/numpy.argsort.html
-# Argsort returns the indices that would sort an array - https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
-# By default, argsort is in ascending order, but below, we make it in descending order and then add 1 since ranks start at 1
+# By default, argsort is in ascending order, but below, we make it in 
+# descending order and then add 1 since ranks start at 1
 sortedResults = results.argsort()[::-1] +1
 sortedResults
 
