@@ -108,8 +108,9 @@ for k1, v1 in people.items():
             row.append(v2)   
             lastKey = k1
 M_people = np.array(peopleValues)
-#M_people.shape
-#np.sum(M_people, axis=1)
+#Verify the sums = 1
+np.sum(M_people, axis=1)
+#Not exactly 1 in all cases. Maybe a problem
 #%%
 ###############################################################################
 # Transform the restaurant data into a matrix(M_restaurants)
@@ -117,7 +118,7 @@ M_people = np.array(peopleValues)
 ###############################################################################
 #%%
 #Generate 10 rows of random values between 1 and 5
-#Snipped and modded from Kthomas
+#Snipped from Kthomas and modded 
 names  = ['Flacos', 'Joes', 'McDonalds', 'BurgerKing', 'DannysTasteOfTexas ',
           'RedLobster', 'TGIFridays', 'OliveGarden', 'Derpburgers', 'PHO501']
 cats = ['Distance', 'Novelty', 'Cost', 'Vegetarian']
@@ -142,28 +143,49 @@ for k1, v1 in restaurants.items():
 #Noted that the shape is 8 but we need it to be the same shape as people matrix
 #len(restaurantsValues)
 #create np matrix and reshape to 2 by 4 in the same function
-M_restaurants = np.reshape(restaurantsValues, (4,10))
+M_restaurants = np.reshape(restaurantsValues, (10,4))
 #Verify shape
 #M_restaurants.shape
 #%%
+###############################################################################
+# Informally describe what a linear combination is  and how it will relate to
+# our resturant matrix.
+###############################################################################
+"""
+A linear combination is when we have several constant (linear) values and 
+determine the product of them and some other typically varying values. (y=mx) 
+In our case we are getting the product of each rating for each restaurant 
+(constants) and each persons preferences.  For example Jane’s willingness to 
+travel is 0.1596993 and Flaco’s distance is 1 (Out of 5 which means it is far)
+Jane’s weighted willingness to travel to flaco's is 1(0.1596993) = 0.1596993.
+Her weighted willingness to travel to Joes's is 4(0.1596993) = 0.6387972.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We HAVE A PROBLEM because each persons preference is less than 1 but the 
+restaurants ratings are certainly described as higher is more desireable. I 
+will revisit this later.
+"""
+#%%
+###############################################################################
+# Choose a person and compute(using a linear combination) the top restaurant
+# for them.  What does each entry in the resulting vector represent.
+###############################################################################
+#Swap axis on M_people
+M_people = np.swapaxes(M_people, 1, 0)
+#%%
+#Figure out mappings
+#janeTemp= M_people[:,0]
+#flacoTemp=M_restaurants[0,:]
+#arguments are 1st rows, 2nd columns
+#For Jane only Flacos:
+#janeFlacosResults=np.matmul(M_restaurants[0,:], M_people[:,0])
+#For Jane all Restaurants:
+janeAllResults=np.matmul(M_restaurants, M_people[:,0])
+"""
+I have calculated scores for all restaurants from Janes preferences. Assuming 
+that the lower the preference value the more important it is to Jane.
+The result (for now) shows that the best restaurant for jane is janeAllResults[5]
+"""
+#%%
 
 
 
@@ -172,8 +194,7 @@ M_restaurants = np.reshape(restaurantsValues, (4,10))
 
 #%%
 # Matrix multiplication
-
-##########################Notes from Christopher Havenstein
+#Notes from Christopher Havenstein
 ## Dot products are the matrix multiplication of a row vectors and column vectors (n,p) * (p,n)
 ##  shape example: ( 2 X 4 ) * (4 X 2) = 2 * 2
 ## documentation: https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
@@ -182,16 +203,13 @@ M_restaurants = np.reshape(restaurantsValues, (4,10))
 ## https://en.wikipedia.org/wiki/Matrix_multiplication
 ## https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul
 ##However, this won't work...
-###########################
-#%%
-#This errors because matrices aren't aligned properly. Inner dim must be same size
+
 #np.matmul(restaurantsMatrix, peopleMatrix)
 #restaurantsMatrix.shape, peopleMatrix.shape
 #Out[10]: ((2, 4), (2, 4))
 #%%
 
-#Swap axis on peopleMatrix
-newPeopleMatrix = np.swapaxes(peopleMatrix, 1, 0)
+
 #%%
 #https://docs.scipy.org/doc/numpy/reference/generated/numpy.swapaxes.html
 newPeopleMatrix = np.swapaxes(peopleMatrix, 0, 1)
