@@ -1,15 +1,12 @@
-#Snippets provided by Christopher Havenstein
+#Snippets and assistance provided by Christopher Havenstein
 import numpy as np
-
-# Decision making with Matrices
-#You and friends are trying to decide where to go for lunch. Pick a resturant thats best for everyone.  
-# Then you should decide if you should split into two groups so eveyone is happier.
-
-# You asked your 10 work friends to answer a survey. They gave you back the following dictionary object.
-
-
 #%%
-#The people nested dictionaries
+#Set a seed for consistent results
+np.random.seed(seed=1)
+##Generate 10 rows of 4 random values which each sum to 1 for peoples'
+# preferences
+npRatings=np.array(np.random.dirichlet(np.ones(4),size=10))
+#Peoples' Preferenmces in nested dictionaries (Automate this if I have time)
 people = {'Jane': {'willingness to travel': 0.1596993,
                   'desire for new experience':0.67131344,
                   'cost':0.15006726,
@@ -92,17 +89,11 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   },
                   }
 #%%
-#Generate More data that will have sum of 1
-#Set a seed
-np.random.seed(seed=1)
-#Generate 10 rows of 4 random values which each sum to 1
-npRatings=np.array(np.random.dirichlet(np.ones(4),size=10))
-#Generate 10 rows of random values between 1 and 10
-npRandScores=np.random.randint(1,6,10)
-
-#%%
-# Transform the user data into a matrix(M_people). Keep track of column and row ids.
-
+###############################################################################
+#Transform the user data into a matrix(M_people).
+#Keep track of column and row ids.
+#Normalize the points for each user -- make their preferences add to 1.
+###############################################################################
 peopleKeys, peopleValues = [], []
 lastKey = 0
 for k1, v1 in people.items():
@@ -116,44 +107,69 @@ for k1, v1 in people.items():
             peopleValues.append(row)
             row.append(v2)   
             lastKey = k1
+M_people = np.array(peopleValues)
+#M_people.shape
+#np.sum(M_people, axis=1)
 #%%
-peopleMatrix = np.array(peopleValues)
-peopleMatrix.shape
+###############################################################################
+# Transform the restaurant data into a matrix(M_restaurants)
+# use the same column index.
+###############################################################################
 #%%
-# Next you collected data from an internet website. You got the following information.
-#1=bad, 5=great
-restaurants  = {'flacos':{'distance' : 2,
-                        'novelty' : 3,
-                        'cost': 4,
-                        #'average rating': 5,
-                        #'cuisine': 5,
-                        'vegetarian': 5
-                        },
-              'Joes':{'distance' : 5,
-                        'novelty' : 1,
-                        'cost': 5,
-                        #'average rating': 5,
-                        #'cuisine': 5,
-                        'vegetarian': 3
-                      }
+#Generate 10 rows of random values between 1 and 5
+#Snipped and modded from Kthomas
+names  = ['Flacos', 'Joes', 'McDonalds', 'BurgerKing', 'DannysTasteOfTexas ',
+          'RedLobster', 'TGIFridays', 'OliveGarden', 'Derpburgers', 'PHO501']
+cats = ['Distance', 'Novelty', 'Cost', 'Vegetarian']
 
-}
+def make_restaurants_dict(names, categories):
+    restaurants = {}
+
+    for n in names:
+        npRandScores=np.random.randint(1,6,10)
+        dict_input = dict(zip(categories, npRandScores))
+        restaurants[n] = dict_input
+    
+    return restaurants
+
+restaurants = make_restaurants_dict(names, cats)
 #%%
-# Transform the restaurant data into a matrix(M_resturants) use the same column index.
 restaurantsKeys, restaurantsValues = [], []
 for k1, v1 in restaurants.items():
     for k2, v2 in v1.items():
         restaurantsKeys.append(k1+'_'+k2)
         restaurantsValues.append(v2)
-#%%
 #Noted that the shape is 8 but we need it to be the same shape as people matrix
 #len(restaurantsValues)
-#%%
 #create np matrix and reshape to 2 by 4 in the same function
-restaurantsMatrix = np.reshape(restaurantsValues, (2,4))
-#%%
+M_restaurants = np.reshape(restaurantsValues, (4,10))
 #Verify shape
-#restaurantsMatrix.shape
+#M_restaurants.shape
+#%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #%%
 # Matrix multiplication
 
