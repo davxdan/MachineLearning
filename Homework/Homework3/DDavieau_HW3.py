@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Feb 16 11:18:35 2019
-
-@author: Chris
-"""
-
+#Snippets provided by Christopher Havenstein
 import numpy as np
 
 # Decision making with Matrices
@@ -32,14 +26,79 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   #'hipster points':3,
                   'vegetarian': 0.15251223,
                   },
+           'Charlie': {'willingness to travel': 0.312165,
+                  'desire for new experience':0.472797,
+                  'cost':0.0874337,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.127604,
+                  },
+            'Daniel': {'willingness to travel': 0.24375,
+                  'desire for new experience':0.521329,
+                  'cost':0.0568194,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.178102,
+                  },
+            'Emma': {'willingness to travel': 0.467763,
+                  'desire for new experience':0.503437,
+                  'cost':0.0198863,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.00891349,
+                  },
+            'Felicia': {'willingness to travel': 0.0632823,
+                  'desire for new experience':0.715663,
+                  'cost':0.0351984,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.185856,
+                  },
+            'Gary': {'willingness to travel': 0.577415,
+                  'desire for new experience':0.138869,
+                  'cost':0.214609,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.0691065,
+                  },
+            'Helen': {'willingness to travel': 0.1596993,
+                  'desire for new experience':0.67131344,
+                  'cost':0.15006726,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.01892,
+                  },
+            'Igor': {'willingness to travel': 0.1596993,
+                  'desire for new experience':0.67131344,
+                  'cost':0.15006726,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.01892,
+                  },
+            'Jimmy': {'willingness to travel': 0.1596993,
+                  'desire for new experience':0.67131344,
+                  'cost':0.15006726,
+                  #'indian food':1,
+                  #'Mexican food':1,
+                  #'hipster points':3,
+                  'vegetarian': 0.01892,
+                  },
                   }
 #%%
+#Generate More data that will have sum of 1
 #Set a seed
 np.random.seed(seed=1)
 #Generate 10 rows of 4 random values which each sum to 1
-npRatings=np.array([np.random.dirichlet(np.ones(4),size=10)])
+npRatings=np.array(np.random.dirichlet(np.ones(4),size=10))
 #Generate 10 rows of random values between 1 and 10
-npRandScores=np.random.randint(1,11,10)
+npRandScores=np.random.randint(1,6,10)
 
 #%%
 # Transform the user data into a matrix(M_people). Keep track of column and row ids.
@@ -156,7 +215,7 @@ results = np.matmul(restaurantsMatrix, newPeopleMatrix)
 # Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
 # I believe that this is what John and  is asking for, sum by columns
 np.sum(results, axis=1)
-
+#%%
 
 # Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.   
 # Do the same as above to generate the optimal resturant choice.
