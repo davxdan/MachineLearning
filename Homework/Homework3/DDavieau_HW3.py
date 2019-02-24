@@ -48,12 +48,12 @@ people = {'Jane': {'willingness to travel': 0.1596993,
                   'vegetarian': 0.00891349,
                   },
             'Felicia': {'willingness to travel': 0.0632823,
-                  'desire for new experience':0.715663,
+                  'desire for new experience':0.185856,
                   'cost':0.0351984,
                   #'indian food':1,
                   #'Mexican food':1,
                   #'hipster points':3,
-                  'vegetarian': 0.185856,
+                  'vegetarian': 0.715663,
                   },
             'Gary': {'willingness to travel': 0.577415,
                   'desire for new experience':0.138869,
@@ -183,6 +183,7 @@ M_people = np.swapaxes(M_people, 1, 0)
 #janeFlacosResults=np.matmul(M_restaurants[0,:], M_people[:,0])
 #For Jane all Restaurants:
 janeAllResults=np.matmul(M_restaurants, M_people[:,0])
+feliciaAllResults=np.matmul(M_restaurants, M_people[:,6])
 """
 The result (for now) shows that the best restaurant for jane is 
 janeAllResults[7]. We are using the "Dot Product".
@@ -211,8 +212,8 @@ This matrix represents each persons weighted preferences for each category
 groupFavorites=np.sum(M_usr_x_rest, axis=1)
 """groupFavorites represents the sum of each restaurants weigted score from 
 each person. The result (for now) shows that the best restaurant 
-considering all 10 peoples preferences versus the restaurants 1-5 rating is
-groupFavorites[3]
+considering all 10 peoples preferences versus the restaurants 1-10 rating is
+groupFavorites[6] TGIFridays
 We are using the "Dot Product" when multiplying these matrices.
 """
 #%%
@@ -225,7 +226,12 @@ We are using the "Dot Product" when multiplying these matrices.
 # represent in the real world? How should you preprocess your data to remove
 # this problem?
 ###############################################################################
+"""
+There are ties in some cases. For example TGI, Olive Garden and PHO501 all have
+rating = 8 for vegetarian.
 
+ 
+ """
 #%%
 # Understanding argsort function
 # https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
@@ -237,8 +243,8 @@ We are using the "Dot Product" when multiplying these matrices.
 
 # By default, argsort is in ascending order, but below, we make it in 
 # descending order and then add 1 since ranks start at 1
-sortedResults = results.argsort()[::-1] +1
-sortedResults
+#M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1] +1
+M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1]+1
 
 #What is the problem here? 
                                
