@@ -117,7 +117,7 @@ np.sum(M_people, axis=1)
 # use the same column index.
 ###############################################################################
 #%%
-#Generate 10 rows of random values between 1 and 5
+#Generate 10 rows of random values between 1 and 10
 #Snipped from Kthomas and modded 
 names  = ['Flacos', 'Joes', 'McDonalds', 'BurgerKing', 'DannysTasteOfTexas ',
           'RedLobster', 'TGIFridays', 'OliveGarden', 'Derpburgers', 'PHO501']
@@ -183,10 +183,10 @@ M_people = np.swapaxes(M_people, 1, 0)
 #janeFlacosResults=np.matmul(M_restaurants[0,:], M_people[:,0])
 #For Jane all Restaurants:
 janeAllResults=np.matmul(M_restaurants, M_people[:,0])
-feliciaAllResults=np.matmul(M_restaurants, M_people[:,6])
+feliciaAllResults=np.matmul(M_restaurants, M_people[:,5])
 """
 The result (for now) shows that the best restaurant for jane is 
-janeAllResults[7]. We are using the "Dot Product".
+janeAllResults[0]. We are using the "Dot Product".
 """
 #%%
 ###############################################################################
