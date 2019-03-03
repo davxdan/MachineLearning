@@ -217,6 +217,7 @@ these matrices.
 # do the entry’s represent?
 ###############################################################################
 groupFavorites=np.sum(M_usr_x_rest, axis=1)
+alt_groupFavorites=np.sum(M_usr_x_rest, axis=0)
 """groupFavorites represents the sum of each restaurants weigted score from 
 each person. The result (for now) shows that the best restaurant 
 considering all 10 peoples preferences versus the restaurants 1-10 rating is
