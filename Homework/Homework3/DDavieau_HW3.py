@@ -263,8 +263,13 @@ the indexes (smallest to largest) which means I need to convert it somehow.
 The second is that there are ties in some cases. For example TGI, Olive Garden
 and PHO501 all have rating = 8 for vegetarian.
 
-I may be missing something here I need to refer back to class recoding when 
-Andrea discussed this.
+I've opted to stick with the weights which sum to 1 for preferences.When we
+convert from scores to rank we are losing the relative importance of things.
+
+For example: Felicia REALLY doesn't want to eat meat and it is probably a 
+disqualifying factor for her. If we rank the importance vegeterian appears as 
+the most important #1(of4) to her as expected. However she actuually indicated 
+this is 71.5 % weight of her preference therfore we are losing some precision.
 """
 ###############################################################################
 # Find  user profiles that are problematic, explain why?
@@ -291,4 +296,7 @@ Andrea discussed this.
 # Tommorow you visit another team. You have the same restaurants and they told 
 # you their optimal ordering for restaurants.  Can you find their weight 
 # matrix?
+""" We could derive a weight matrix but not THE weight matrix. When we convert 
+values to rank we are losing the precision."""
+
 ###############################################################################
