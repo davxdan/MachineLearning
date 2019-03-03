@@ -144,6 +144,7 @@ for k1, v1 in restaurants.items():
 #len(restaurantsValues)
 #create np matrix and reshape to 10 by 4 in the same function
 M_restaurants = np.reshape(restaurantsValues, (10,4))
+#alt_M_restaurants = np.reshape(restaurantsValues, (4,10))
 #Verify shape
 #M_restaurants.shape
 #%%
@@ -173,6 +174,7 @@ will revisit this later.
 # for them.  What does each entry in the resulting vector represent.
 ###############################################################################
 #Swap axis on M_people
+#alt_M_people = M_people
 M_people = np.swapaxes(M_people, 1, 0)
 #%%
 #Figure out mappings
@@ -187,6 +189,9 @@ feliciaAllResults=np.matmul(M_restaurants, M_people[:,5])
 """
 The result (for now) shows that the best restaurant for jane is 
 janeAllResults[0]. We are using the "Dot Product".
+
+Each result in the janeAllResults vector is the 
+(weighted importance of each of Janes preferences) * (Each restaurants rating)
 """
 #%%
 ###############################################################################
@@ -195,12 +200,14 @@ janeAllResults[0]. We are using the "Dot Product".
 ###############################################################################
 ## intuition: https://www.mathsisfun.com/algebra/matrix-multiplying.html
 M_usr_x_rest=np.matmul(M_restaurants, M_people)
+#alt_usr_x_rest=np.matmul(alt_M_restaurants, alt_M_people)
 """
 This matrix represents each persons weighted preferences for each category 
-(balanced since all must sum to 1) multiplied by the rating for each category
- in each restaurant. We can rank the restaurants for each person and use the 
- results to determine which will be the consensus favorite choice for the whole
- group of 10. We are using the "Dot Product" when multiplying these matrices.
+(all persons are balanced since all must sum to 1) multiplied by the rating of
+each category in each restaurant. We can rank the restaurants for each person 
+and use the results to determine which will be the consensus favorite choice 
+for the whole group of 10. We are using the "Dot Product" when multiplying 
+these matrices.
 """
 
 #%%
@@ -229,9 +236,7 @@ We are using the "Dot Product" when multiplying these matrices.
 """
 There are ties in some cases. For example TGI, Olive Garden and PHO501 all have
 rating = 8 for vegetarian.
-
- 
- """
+"""
 #%%
 # Understanding argsort function
 # https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
@@ -245,6 +250,44 @@ rating = 8 for vegetarian.
 # descending order and then add 1 since ranks start at 1
 #M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1] +1
 M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1]+1
+#%%
 
-#What is the problem here? 
-                               
+###############################################################################
+#What is the problem here?
+###############################################################################
+"""
+I am seeing 2 problems. The first being that argsort results are referring to 
+the indexes (smallest to largest) which means I need to convert it somehow.
+
+The second is that there are ties in some cases. For example TGI, Olive Garden
+and PHO501 all have rating = 8 for vegetarian.
+
+I may be missing something here I need to refer back to class recoding when 
+Andrea discussed this.
+"""
+###############################################################################
+# Find  user profiles that are problematic, explain why?
+###############################################################################
+
+###############################################################################
+# Think of two metrics to compute the disatistifaction with the group.
+###############################################################################
+
+###############################################################################
+# Should you split in two groups today?
+###############################################################################
+
+###############################################################################
+#---- Did you understand what's going on? ---------
+###############################################################################
+
+###############################################################################
+# Ok. Now you just found out the boss is paying for the meal. How should you 
+#adjust. Now what is best restaurant?
+###############################################################################
+
+###############################################################################
+# Tommorow you visit another team. You have the same restaurants and they told 
+# you their optimal ordering for restaurants.  Can you find their weight 
+# matrix?
+###############################################################################
