@@ -266,12 +266,6 @@ finalRestRank=groupFavorites.argsort()
 ###############################################################################
 # Find  user profiles that are problematic, explain why?
 ###############################################################################
-
-plot_dims = (12,10)
-fig, ax = plt.subplots(figsize=plot_dims)
-sns.heatmap(ax=ax, data=derp, annot=True)
-plt.show()
-
 import pandas as pd
 derp= pd.DataFrame(data=M_usr_x_rest)
 
@@ -281,6 +275,19 @@ derp.columns= ['Jane','Bob','Charlie','Daniel','Emma','Felicia','Gary',
 derp.rename(index={0:'Flacos',1:'Joes',2:'McDonalds',3:'BurgerKing',
                    4:'DannysTasteofTexas',5:'Redlobster',6:'TGIFridays',
                    7:'OliveGarden',8:'Derpburgers',9:'PHO501'}, inplace=True)
+
+plot_dims = (12,10)
+fig, ax = plt.subplots(figsize=plot_dims)
+sns.heatmap(ax=ax, data=derp, annot=True)
+plt.show()
+
+"""I am looking for outliers to see if anyone has unusual preferences. The
+heatmap indicates that Gary and Igor score TGI Fridays (the group's top choice)
+with 6.8 and 6.2 which is possibly insignificant but relatively lower than
+everyone else. They might not be too happy about going to TGIFridays.
+I also see that Bob and Felicia aren't too happy with Flacos (the group's
+second choice)
+"""
 #%%
 ###############################################################################
 # Think of two metrics to compute the disatistifaction with the group.
@@ -303,9 +310,9 @@ derp.rename(index={0:'Flacos',1:'Joes',2:'McDonalds',3:'BurgerKing',
 # Tommorow you visit another team. You have the same restaurants and they told 
 # you their optimal ordering for restaurants.  Can you find their weight 
 # matrix?
-""" We could derive a weight matrix but not THE weight matrix. When we convert 
-values to rank we are losing the precision.
-https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.linalg.pinv.html
+""" We could derive a weight matrix but not THE weight matrix. When the values
+are ranked the precision is lost.
+https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.linalg.pinv
+.html
 """
-
 ###############################################################################
