@@ -1,5 +1,7 @@
 #Snippets and assistance provided by Christopher Havenstein
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 #%%
 #Set a seed for consistent results
 np.random.seed(seed=1)
@@ -163,10 +165,6 @@ desreable) Jane’s weighted willingness to travel to flaco's is
 .
 Her weighted willingness to travel to Joes's is 1(0.1596993) = 0.1596993). This
 tells us that judging only from distance Flacos is best for Jane. 
-
-We may HAVE A PROBLEM because each persons preference is less than 1 but the 
-restaurants ratings are certainly described as higher is more desireable. I 
-will revisit this later.
 """
 #%%
 ###############################################################################
@@ -217,9 +215,9 @@ these matrices.
 # do the entry’s represent?
 ###############################################################################
 groupFavorites=np.sum(M_usr_x_rest, axis=1)
-alt_groupFavorites=np.sum(M_usr_x_rest, axis=0)
+#alt_groupFavorites=np.sum(M_usr_x_rest, axis=0)
 """groupFavorites represents the sum of each restaurants weigted score from 
-each person. The result (for now) shows that the best restaurant 
+each person. The result shows that the best restaurant 
 considering all 10 peoples preferences versus the restaurants 1-10 rating is
 groupFavorites[6] TGIFridays
 We are using the "Dot Product" when multiplying these matrices.
@@ -234,10 +232,7 @@ We are using the "Dot Product" when multiplying these matrices.
 # represent in the real world? How should you preprocess your data to remove
 # this problem?
 ###############################################################################
-"""
-There are ties in some cases. For example TGI, Olive Garden and PHO501 all have
-rating = 8 for vegetarian.
-"""
+
 #%%
 # Understanding argsort function
 # https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
@@ -250,31 +245,43 @@ rating = 8 for vegetarian.
 # By default, argsort is in ascending order, but below, we make it in 
 # descending order and then add 1 since ranks start at 1
 #M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1] +1
-M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1]+1
+M_usr_x_rest_rank = M_usr_x_rest.argsort()
 #%%
 
 ###############################################################################
 #What is the problem here?
 ###############################################################################
 """
-I am seeing 2 problems. The first being that argsort results are referring to 
-the indexes (smallest to largest) which means I need to convert it somehow.
-
-The second is that there are ties in some cases. For example TGI, Olive Garden
-and PHO501 all have rating = 8 for vegetarian.
-
-I've opted to stick with the weights which sum to 1 for preferences.When we
-convert from scores to rank we are losing the relative importance of things.
-
-For example: Felicia REALLY doesn't want to eat meat and it is probably a 
-disqualifying factor for her. If we rank the importance vegeterian appears as 
+When we convert from scores to rank we are losing the relative importance of 
+things. For example: Felicia REALLY doesn't want to eat meat and it is probably
+a disqualifying factor for her. If we rank the importance vegeterian appears as 
 the most important #1(of4) to her as expected. However she actuually indicated 
 this is 71.5 % weight of her preference therfore we are losing some precision.
+
+I would prefer to use the calculated values rather than ranks until we
+have final scores for the restaurants. 
 """
+finalRestRank=groupFavorites.argsort()
+#%%
 ###############################################################################
 # Find  user profiles that are problematic, explain why?
 ###############################################################################
 
+plot_dims = (12,10)
+fig, ax = plt.subplots(figsize=plot_dims)
+sns.heatmap(ax=ax, data=derp, annot=True)
+plt.show()
+
+import pandas as pd
+derp= pd.DataFrame(data=M_usr_x_rest)
+
+
+derp.columns= ['Jane','Bob','Charlie','Daniel','Emma','Felicia','Gary',
+               'Helen','Igor','Jimmy',]
+derp.rename(index={0:'Flacos',1:'Joes',2:'McDonalds',3:'BurgerKing',
+                   4:'DannysTasteofTexas',5:'Redlobster',6:'TGIFridays',
+                   7:'OliveGarden',8:'Derpburgers',9:'PHO501'}, inplace=True)
+#%%
 ###############################################################################
 # Think of two metrics to compute the disatistifaction with the group.
 ###############################################################################
@@ -297,6 +304,8 @@ this is 71.5 % weight of her preference therfore we are losing some precision.
 # you their optimal ordering for restaurants.  Can you find their weight 
 # matrix?
 """ We could derive a weight matrix but not THE weight matrix. When we convert 
-values to rank we are losing the precision."""
+values to rank we are losing the precision.
+https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.linalg.pinv.html
+"""
 
 ###############################################################################
