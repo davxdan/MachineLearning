@@ -296,7 +296,12 @@ second choice)
 ###############################################################################
 # Should you split in two groups today?
 ###############################################################################
+from sklearn.decomposition import PCA
+pca = PCA(n_components=2)  
+peopleMatrixPcaTransform = pca.fit_transform(M_people)  
 
+print(pca.components_)
+print(pca.explained_variance_)
 ###############################################################################
 #---- Did you understand what's going on? ---------
 ###############################################################################
