@@ -236,15 +236,6 @@ We are using the "Dot Product" when multiplying these matrices.
 #%%
 # Understanding argsort function
 # https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
-#x = numpy.array([1.48,1.41,0.0,0.1])
-#print x.argsort()
-# >[2 3 1 0]
-# The results are smallest to largest. So it is showing that the lowest value 
-# is at index number 2, and the largest is at index number 0
-
-# By default, argsort is in ascending order, but below, we make it in 
-# descending order and then add 1 since ranks start at 1
-#M_usr_x_rest_rank = M_usr_x_rest.argsort()[::-1] +1
 M_usr_x_rest_rank = M_usr_x_rest.argsort()
 #%%
 
@@ -254,12 +245,19 @@ M_usr_x_rest_rank = M_usr_x_rest.argsort()
 """
 When we convert from scores to rank we are losing the relative importance of 
 things. For example: Felicia REALLY doesn't want to eat meat and it is probably
-a disqualifying factor for her. If we rank the importance vegeterian appears as 
-the most important #1(of4) to her as expected. However she actuually indicated 
-this is 71.5 % weight of her preference therfore we are losing some precision.
+a disqualifying factor for her. If we rank the importance of her preferences 
+vegeterian appears as the most important #1(of4) to her as expected. However
+she actually indicated this is 71.5 % weight of her preference therfore we are
+losing some precision. If she gave vegeterian .28 and all others .24 it would
+still rank #1 but we wouldnt know that it isn't all that important.
 
-I would prefer to use the calculated values rather than ranks until we
-have final scores for the restaurants. 
+I would prefer to use the calculated values rather than ranks until we have 
+final scores for the restaurants.
+
+The argsort function is a bit confusing. It sorts and ranks in ascending order
+and indicates the index location rather than the actual values. The 
+finalRestRank matrix created below indicates that the highest ranking choice is
+in index 6 location (TGI Fridays)
 """
 finalRestRank=groupFavorites.argsort()
 #%%
