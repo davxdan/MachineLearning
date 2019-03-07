@@ -295,11 +295,16 @@ second choice)
 # Should you split in two groups today?
 ###############################################################################
 from sklearn.decomposition import PCA
-pca = PCA(n_components=2)  
-peopleMatrixPcaTransform = pca.fit_transform(M_people)  
+pca = PCA(n_components=4)  
+peopleMatrixPcaTransform = pca.fit_transform(M_people)
 
-print(pca.components_)
+troublemakers = pca.components_
+pdTroublemakers= pd.DataFrame(data=troublemakers)
+pdTroublemakers.columns= ['Jane','Bob','Charlie','Daniel','Emma','Felicia','Gary',
+               'Helen','Igor','Jimmy',]
 print(pca.explained_variance_)
+
+
 ###############################################################################
 #---- Did you understand what's going on? ---------
 ###############################################################################
