@@ -295,20 +295,51 @@ second choice)
 # Should you split in two groups today?
 ###############################################################################
 from sklearn.decomposition import PCA
-pca = PCA(n_components=4)  
+pca = PCA(n_components=3)  
 peopleMatrixPcaTransform = pca.fit_transform(M_people)
-
-troublemakers = pca.components_
-pdTroublemakers= pd.DataFrame(data=troublemakers)
-pdTroublemakers.columns= ['Jane','Bob','Charlie','Daniel','Emma','Felicia','Gary',
-               'Helen','Igor','Jimmy',]
 print(pca.explained_variance_)
+"""Theres no need to scale for PCA since we are already on a common scale.  I 
+avoid Pandas for processing but for displaying results I will use it"""
+#Generate Coords for a graph based on the loading scores and scaled data
+per_var = np.round(pca.explained_variance_ratio_*100, decimals=1)
+#Create labels
+labels = ['PC' + str(x) for x in range(1, len(per_var)+1)]
+#Create matplotlib bar (scree) plot
+#Noted that a 4th compoinent doesnt explain a significant amount of the 
+#variance so I reduced to 3 components
+plt.bar(x=range(1,len(per_var)+1), height=per_var, tick_label=labels)
+plt.ylabel('Percentage of Explained Variance')
+plt.xlabel('Principal Component')
+plt.title('Scree Plot')
+plt.show()
+""" Almost 100% of the variance is explained by the first 3 components."""
 
+#Findout who the people with unusual preferences are
+uniqueNeeds = pca.components_
+pduniqueNeeds= pd.DataFrame(data=uniqueNeeds)
+pduniqueNeeds.columns= ['Jane','Bob','Charlie','Daniel','Emma','Felicia','Gary',
+               'Helen','Igor','Jimmy',]
+plot_dims = (12,10)
+fig, ax = plt.subplots(figsize=plot_dims)
+sns.heatmap(ax=ax, data=pduniqueNeeds, annot=True)
+plt.show()
+""" We can see in PC1 (at index 0) that Felicia's and Igor's preferences are 
+quite different than the others and causing variance. In PC2 Felicia's, Gary's
+and Igor's preferences are the culprits.
+
+However the highest rank restaurant TGI Fridayu's does seem to please them. 
+Assuming the prefer to socialize I would not split the group."""
+#%%
 
 ###############################################################################
 #---- Did you understand what's going on? ---------
 ###############################################################################
-
+""" We want to find the best choice for everyone. If we found there were 
+significant differences in thier preferences we could cluster the individuals 
+based by preferences and choose different restaurants base on those preferences
+to maximize happiness and group size. This could be even more comprehensive if 
+we do the calculus to find the highest balance of happiness and group size.
+"""
 ###############################################################################
 # Ok. Now you just found out the boss is paying for the meal. How should you 
 #adjust. Now what is best restaurant?
